@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+"""Emit total CPU busy percentage once per second."""
+
+import time
+
+
+def read_cpu():
+    with open('/proc/stat') as f:
+        line = f.readline()
+
+    fields = [int(x) for x in line.split()[1:]]
+
+    idle = fields[3] + fields[4]
+    total = sum(fields)
+
+    return total, idle
+
+
+prev_total, prev_idle = read_cpu()
+
+while True:
+    time.sleep(1)
+
+    total, idle = read_cpu()
+
+    d_total = total - prev_total
+    d_idle = idle - prev_idle
+
+    busy_pct = 100.0 * (d_total - d_idle) / d_total
+
+    print(f"cpu {busy_pct:.1f}%", flush=True)
+
+    prev_total, prev_idle = total, idle

@@ -1,0 +1,13 @@
+# never commit keys or secrets
+id_*
+!id_*.pub
+*.pem
+*.key
+.env
+*.secret
+
+# editor / OS junk
+*.swp
+*~
+.DS_Store
+__pycache__/
